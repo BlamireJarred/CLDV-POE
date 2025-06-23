@@ -1,0 +1,136 @@
+﻿@model PaginatedList<POEPart1_VenueBookingSystem.Models.BookingViewModel>
+
+@{
+    ViewData["Title"] = "Bookings";
+}
+
+<h1>Bookings</h1>
+
+<form asp-action="Index" method="get" class="row g-3 mb-3">
+
+    <div class="col-md-3">
+        <input type="text" name="searchString" class="form-control" placeholder="Search by Booking ID or Event Name" value="@ViewData["CurrentFilter"]" />
+    </div>
+
+    <div class="col-md-2">
+        <select name="eventType" class="form-control">
+            <option value="">All Event Types</option>
+            @foreach (var type in (SelectList)ViewBag.EventTypes)
+            {
+                <option value="@type.Text" selected="@(Context.Request.Query["eventType"] == type.Text ? "selected" : null)">
+                    @type.Text
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <input type="date" name="startDate" class="form-control" />
+    </div>
+
+    <div class="col-md-2">
+        <input type="date" name="endDate" class="form-control" />
+    </div>
+
+    <div class="col-md-2">
+        <select name="isVenueAvailable" class="form-control">
+            <option value="">All Venues</option>
+            <option value="true">Available Only</option>
+            <option value="false">Unavailable Only</option>
+        </select>
+    </div>
+
+    <div class="col-md-1">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+
+</form>
+
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Booking</a>
+</p>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Booking ID</th>
+            <th>Event Name</th>
+            <th>Venue Name</th>
+            <th>Venue Location</th>
+            <th>Event Date</th>
+            <th>Booking Date</th>
+            <th>Actions</th>
+            <th>Availability</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.BookingId)</td>
+                <td>@Html.DisplayFor(modelItem => item.EventName)</td>
+                <td>@Html.DisplayFor(modelItem => item.VenueName)</td>
+                <td>@Html.DisplayFor(modelItem => item.VenueLocation)</td>
+                <td>@Html.DisplayFor(modelItem => item.EventDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.BookingDate)</td>
+                <td>
+                    @if (item.IsVenueAvailable)
+                    {
+                        <span class="badge bg-success">Available</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Unavailable</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.BookingId" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.BookingId" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.BookingId" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<div class="mt-4">
+    <nav aria-label="Booking pagination">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @prevDisabled">
+                <a asp-action="Index"
+                   asp-route-pageNumber="@(Model.PageIndex - 1)"
+                   asp-route-searchString="@ViewData["CurrentFilter"]"
+                   class="page-link">
+                    Previous
+                </a>
+            </li>
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                    <a asp-action="Index"
+                       asp-route-pageNumber="@i"
+                       asp-route-searchString="@ViewData["CurrentFilter"]"
+                       class="page-link">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <li class="page-item @nextDisabled">
+                <a asp-action="Index"
+                   asp-route-pageNumber="@(Model.PageIndex + 1)"
+                   asp-route-searchString="@ViewData["CurrentFilter"]"
+                   class="page-link">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

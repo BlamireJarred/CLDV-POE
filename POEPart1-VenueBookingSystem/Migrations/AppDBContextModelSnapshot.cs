@@ -17,7 +17,7 @@ namespace POEPart1_VenueBookingSystem.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -35,6 +35,13 @@ namespace POEPart1_VenueBookingSystem.Migrations
 
                     b.Property<int>("EventId")
                         .HasColumnType("int");
+
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsVenueAvailable")
+                        .HasColumnType("bit");
 
                     b.Property<int>("VenueId")
                         .HasColumnType("int");
@@ -58,14 +65,21 @@ namespace POEPart1_VenueBookingSystem.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime>("EventDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EventName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("VenueId")
                         .HasColumnType("int");
@@ -94,45 +108,57 @@ namespace POEPart1_VenueBookingSystem.Migrations
 
                     b.Property<string>("Location")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("VenueName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("VenueId");
 
-                    b.ToTable("Venue", (string)null);
+                    b.ToTable("Venue");
                 });
 
             modelBuilder.Entity("POEPart1_VenueBookingSystem.Models.Booking", b =>
                 {
-                    b.HasOne("POEPart1_VenueBookingSystem.Models.Event", "Events")
-                        .WithMany()
+                    b.HasOne("POEPart1_VenueBookingSystem.Models.Event", "Event")
+                        .WithMany("Booking")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("POEPart1_VenueBookingSystem.Models.Venue", "Venues")
-                        .WithMany()
-                        .HasForeignKey("VenueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Events");
-
-                    b.Navigation("Venues");
-                });
-
-            modelBuilder.Entity("POEPart1_VenueBookingSystem.Models.Event", b =>
-                {
                     b.HasOne("POEPart1_VenueBookingSystem.Models.Venue", "Venue")
                         .WithMany()
                         .HasForeignKey("VenueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Event");
+
                     b.Navigation("Venue");
+                });
+
+            modelBuilder.Entity("POEPart1_VenueBookingSystem.Models.Event", b =>
+                {
+                    b.HasOne("POEPart1_VenueBookingSystem.Models.Venue", "Venue")
+                        .WithMany("Event")
+                        .HasForeignKey("VenueId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Venue");
+                });
+
+            modelBuilder.Entity("POEPart1_VenueBookingSystem.Models.Event", b =>
+                {
+                    b.Navigation("Booking");
+                });
+
+            modelBuilder.Entity("POEPart1_VenueBookingSystem.Models.Venue", b =>
+                {
+                    b.Navigation("Event");
                 });
 #pragma warning restore 612, 618
         }

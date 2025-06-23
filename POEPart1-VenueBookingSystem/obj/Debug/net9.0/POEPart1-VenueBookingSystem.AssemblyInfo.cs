@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("POEPart1-VenueBookingSystem")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a3345d6931326c542fcddcd1bd91fce5e382e8f4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c0ab239ae8c3ee5ce76a03e399e33aef3113ae80")]
 [assembly: System.Reflection.AssemblyProductAttribute("POEPart1-VenueBookingSystem")]
 [assembly: System.Reflection.AssemblyTitleAttribute("POEPart1-VenueBookingSystem")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

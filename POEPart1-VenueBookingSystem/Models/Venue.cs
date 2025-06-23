@@ -4,18 +4,16 @@ namespace POEPart1_VenueBookingSystem.Models
 {
     public class Venue
     {
+        [Key]
         public int VenueId { get; set; }
-        //[StringLength(50)]
-        public required string VenueName { get; set; }
-        //[StringLength(50)]
-        public required string Location { get; set; }
-        //[Range(1, 100000)]
-        public int Capacity { get; set; }
-        //[StringLength(50)]
-        public required string ImageUrl { get; set; } = "https://via.placeholder.com/150"; // Sample placeholder image
 
-        //public ICollection<Event> Events { get; set; }
-        //public ICollection<Booking> Bookings { get; set; }
-        //public List<Venue> VenueData { get; set; } = new();
+        [StringLength(100)]
+        public required string VenueName { get; set; }
+
+        [StringLength(200)]
+        public required string Location { get; set; }
+        public int Capacity { get; set; }
+        public required string ImageUrl { get; set; }
+        public ICollection<Event>? Event { get; set; }
     }
 }
